@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>未来鹅 FutureGoose｜大学生职业成长 AI 陪伴体</title>
+  <meta name="description" content="从入学到 Offer，陪你一点点长成未来鹅。" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-orb orb-1"></div><div class="bg-orb orb-2"></div>
+  <header class="topbar">
+    <div class="brand"><span class="logo">鹅</span><div><b>未来鹅 FutureGoose</b><small>大学生职业成长 AI 陪伴体</small></div></div>
+    <nav><a href="#diagnosis">职业诊断</a><a href="#chat">问鹅</a><a href="#radar">岗位雷达</a><a href="#interview">模拟面试</a></nav>
+  </header>
+
+  <main>
+    <section class="hero card">
+      <div>
+        <p class="eyebrow">不是等你投简历才出现，而是陪你更早看见方向</p>
+        <h1>从“我不知道适合什么”开始，<br/>一步步长成未来鹅。</h1>
+        <p class="lead">输入年级、专业和困惑，未来鹅会生成成长画像、岗位方向、能力差距与 7 天行动计划；还能帮你问答、练面试、拆简历。</p>
+        <div class="hero-actions"><a class="btn primary" href="#diagnosis">开始 30 秒诊断</a><button class="btn" onclick="seedDemo()">一键填充 Demo 数据</button></div>
+      </div>
+      <aside class="hero-panel">
+        <div class="metric"><b>4</b><span>成长阶段</span></div>
+        <div class="metric"><b>7</b><span>天行动计划</span></div>
+        <div class="metric"><b>5</b><span>岗位方向</span></div>
+      </aside>
+    </section>
+
+    <section id="diagnosis" class="grid two">
+      <div class="card">
+        <h2>① 初次诊断</h2>
+        <p class="muted">填写你的当前状态，生成「成长画像」。所有数据仅保存在本地浏览器。</p>
+        <form id="profileForm" class="form">
+          <label>年级<select id="grade"><option>大一</option><option>大二</option><option>大三</option><option>大四</option><option>研一/研二</option><option>研三</option></select></label>
+          <label>专业<input id="major" placeholder="如：计算机 / 金融 / 新闻传播 / 设计" /></label>
+          <label>目标方向<select id="direction"><option>还不确定</option><option>技术研发</option><option>产品经理</option><option>运营/市场</option><option>设计</option><option>职能/HR/财务</option></select></label>
+          <label>当前困惑<textarea id="pain" rows="3" placeholder="例如：没有实习、不了解产品岗、简历没内容、面试紧张……"></textarea></label>
+          <label>已有经历<textarea id="experience" rows="3" placeholder="课程项目、社团、比赛、实习、作品集等"></textarea></label>
+          <button class="btn primary" type="submit">生成成长画像</button>
+        </form>
+      </div>
+      <div class="card result-card">
+        <h2>② 我的成长画像</h2>
+        <div id="profileResult" class="empty">提交诊断后，将在这里看到阶段标签、岗位建议、短板与行动计划。</div>
+      </div>
+    </section>
+
+    <section id="chat" class="card">
+      <div class="section-head"><div><h2>③ 问鹅：职业困惑问答</h2><p class="muted">内置规则知识库 Demo；可替换为 Dify / 元器 API。</p></div><button class="btn small" onclick="clearChat()">清空对话</button></div>
+      <div id="chatBox" class="chatbox"></div>
+      <div class="chips">
+        <button onclick="askQuick('计算机专业除了开发还能投什么？')">计算机除了开发还能投什么？</button>
+        <button onclick="askQuick('产品经理需要准备什么项目？')">产品经理项目怎么做？</button>
+        <button onclick="askQuick('我没有大厂实习，简历怎么写？')">没有大厂实习怎么办？</button>
+        <button onclick="askQuick('投递没有回应，我很焦虑')">求职焦虑怎么办？</button>
+      </div>
+      <div class="chat-input"><input id="chatInput" placeholder="输入你的问题，如：大二该如何准备腾讯产品岗？" /><button class="btn primary" onclick="sendChat()">发送</button></div>
+    </section>
+
+    <section id="radar" class="grid two">
+      <div class="card">
+        <h2>④ 岗位雷达</h2>
+        <p class="muted">输入技能/兴趣，匹配岗位方向与补齐建议。</p>
+        <textarea id="skills" rows="5" placeholder="例如：Python、数据分析、社群运营、用户访谈、Figma、短视频策划……"></textarea>
+        <button class="btn primary" onclick="runRadar()">生成岗位雷达</button>
+      </div>
+      <div class="card"><h2>匹配结果</h2><div id="radarResult" class="empty">等待分析……</div></div>
+    </section>
+
+    <section id="interview" class="card">
+      <h2>⑤ 模拟面试鹅</h2>
+      <div class="interview-grid">
+        <label>岗位类型<select id="interviewRole"><option>产品经理</option><option>技术研发</option><option>运营/市场</option><option>设计</option></select></label>
+        <button class="btn" onclick="newQuestion()">抽一道面试题</button>
+      </div>
+      <div id="question" class="question">点击按钮抽题。</div>
+      <textarea id="answer" rows="5" placeholder="用 STAR 法回答：背景、任务、行动、结果。"></textarea>
+      <button class="btn primary" onclick="scoreInterview()">AI 评分与追问</button>
+      <div id="interviewResult" class="empty">你的反馈会显示在这里。</div>
+    </section>
+
+    <section class="card footer-card">
+      <h2>部署说明</h2>
+      <ol>
+        <li>将本文件夹上传到 GitHub 仓库。</li>
+        <li>用 Vercel / Netlify / GitHub Pages 选择该仓库并部署。</li>
+        <li>如需接入真实大模型，把 <code>app.js</code> 中 <code>callRealAI()</code> 的接口地址替换为 Dify/元器发布 API。</li>
+      </ol>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
